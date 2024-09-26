@@ -135,7 +135,7 @@ app.post('/triage', (req, res) => {
 
   // Ejecutar el análisis de síntomas con NLP
   analizarSintomas(sintomas, (resultadoNLP) => {
-    console.log(`Resultado del análisis NLP: ${resultadoNLP}`);
+    console.log(`Resultado del análisis NLP: ${resultadoNLP}`); //comentario de prueba
 
     // Almacenar la consulta en la tabla "consultas"
     const sql = 'INSERT INTO consultas (paciente_id, sintomas, resultado_triaje) VALUES (?, ?, ?)';
