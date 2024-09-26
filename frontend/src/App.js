@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import TriageForm from './components/TriageForm';
 import ConsultarPacientes from './components/ConsultarPacientes';
 import Login from './pages/Login';
+import LogoutButton from './components/LogoutButton';  // Importar el botón de logout
 
 const App = () => {
   const [role, setRole] = useState(null);
@@ -23,14 +24,18 @@ const App = () => {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/triage" element={<TriageForm />} />
-        {role === 'medico' && (
-          <Route path="/consultas" element={<ConsultarPacientes />} />
-        )}
-        {/* Redirigir si no está autenticado */}
-        <Route path="*" element={<Navigate to="/triage" />} />
-      </Routes>
+      <div>
+        {/* Mostrar el botón de logout en cualquier página */}
+        <LogoutButton setRole={setRole} />
+        <Routes>
+          <Route path="/triage" element={<TriageForm />} />
+          {role === 'medico' && (
+            <Route path="/consultas" element={<ConsultarPacientes />} />
+          )}
+          {/* Redirigir si no está autenticado */}
+          <Route path="*" element={<Navigate to="/triage" />} />
+        </Routes>
+      </div>
     </Router>
   );
 };
