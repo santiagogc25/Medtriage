@@ -14,7 +14,7 @@ const TriageForm = () => {
       const response = await axios.post('http://localhost:3001/triage', {
         nombre,
         identificacion,
-        sintomas
+        sintomas,
       });
       setMensaje(response.data.mensaje);
       setError('');

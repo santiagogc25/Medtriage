@@ -14,7 +14,6 @@ app.use(bodyParser.json());
 const cors = require('cors');
 app.use(cors());
 
-
 // Clave secreta para firmar tokens (debería almacenarse en variables de entorno)
 const secretKey = 'my_secret_key';
 
@@ -110,8 +109,6 @@ app.get('/consultas', verifyToken, (req, res) => {
   });
 });
 
-
-
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'triage_user',
@@ -126,20 +123,23 @@ db.connect((err) => {
   }
   console.log('Conectado a la base de datos MySQL');
 });
-app.post('/triage', (req, res) => {
-  const { paciente_id, sintomas } = req.body;  // Asegúrate de obtener el paciente_id desde el frontend
 
-  if (!paciente_id || !sintomas) {
+app.post('/triage', (req, res) => {
+  const { nombre, identificacion, sintomas } = req.body;  // Obtener los datos del paciente
+  console.log('Datos recibidos en el backend:', req.body); // Para verificar los datos recibidos
+  
+
+  if (!nombre || !identificacion || !sintomas) {
     return res.status(400).send('Faltan datos en la solicitud');
   }
 
   // Ejecutar el análisis de síntomas con NLP
   analizarSintomas(sintomas, (resultadoNLP) => {
-    console.log(`Resultado del análisis NLP: ${resultadoNLP}`); //comentario de prueba
+    console.log(`Resultado del análisis NLP: ${resultadoNLP}`);
 
     // Almacenar la consulta en la tabla "consultas"
-    const sql = 'INSERT INTO consultas (paciente_id, sintomas, resultado_triaje) VALUES (?, ?, ?)';
-    db.query(sql, [paciente_id, sintomas, resultadoNLP], (err, result) => {
+    const sql = 'INSERT INTO consultas (nombre, identificacion, sintomas, resultado_triaje) VALUES (?, ?, ?, ?)';
+    db.query(sql, [nombre, identificacion, sintomas, resultadoNLP], (err, result) => {
       if (err) {
         console.error('Error al insertar en la base de datos:', err);
         return res.status(500).send('Error en el servidor');
